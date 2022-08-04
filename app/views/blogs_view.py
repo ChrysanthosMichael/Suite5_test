@@ -22,15 +22,15 @@ def query_to_json(blog, articles=None):
             "title": article.title,
             "excerpt": article.excerpt,
             "text": article.text,
-            "date_created": article.date_created,
-            "date_updated": article.date_updated,
+            "date_created": str(article.date_created),
+            "date_updated": str(article.date_updated),
             "writer": article.writer
         } for article in articles] if articles else []
     } 
 
 @blogs_view_blueprint.route('/create', methods=["POST"])
 def create():
-    data = request.form
+    data = json.loads(request.get_json())
     try:
         blog = Blog(
             title=data.get("title"), 
@@ -43,7 +43,7 @@ def create():
 
 @blogs_view_blueprint.route('/update', methods=["POST"])
 def update():
-    data = request.form
+    data = json.loads(request.get_json())
     writer = Blog.query.filter_by(id=data.get("id")).update(data)
     db.session.commit()
     return Response(json.dumps({"updated_rows": writer}), status=200)
@@ -57,8 +57,9 @@ def get_blog_articles(id):
     else:
         return Response(json.dumps(f"Blog {id} not found"), status=404)
 
-@blogs_view_blueprint.route('/delete/<int:id>', methods=["POST"])
-def delete(id):
-    writer = Blog.query.filter_by(id=id).delete()
+@blogs_view_blueprint.route('/delete', methods=["POST"])
+def delete():
+    data = json.loads(request.get_json())
+    blog = Blog.query.filter_by(id=data.get("id")).delete()
     db.session.commit()
-    return Response(json.dumps({"deleted_rows": writer}), status=200)
+    return Response(json.dumps({"deleted_rows": blog}), status=200)
