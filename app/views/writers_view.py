@@ -20,7 +20,7 @@ def query_to_json(writer):
 
 @writers_view_blueprint.route('/create', methods=["POST"])
 def create():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     try:
         writer = Writer(
             name=data.get("name"), 
@@ -35,7 +35,7 @@ def create():
 
 @writers_view_blueprint.route('/update', methods=["POST"])
 def update():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     writer = Writer.query.filter_by(id=data.get("id")).update(data)
     db.session.commit()
     return Response(json.dumps({"updated_rows": writer}), status=200)
@@ -50,7 +50,7 @@ def get_writer(id):
 
 @writers_view_blueprint.route('/delete', methods=["POST"])
 def delete():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     writer = Writer.query.filter_by(id=data.get("id")).delete()
     db.session.commit()
     return Response(json.dumps({"deleted_rows": writer}), status=200)

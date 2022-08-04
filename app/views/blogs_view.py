@@ -30,7 +30,7 @@ def query_to_json(blog, articles=None):
 
 @blogs_view_blueprint.route('/create', methods=["POST"])
 def create():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     try:
         blog = Blog(
             title=data.get("title"), 
@@ -43,7 +43,7 @@ def create():
 
 @blogs_view_blueprint.route('/update', methods=["POST"])
 def update():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     writer = Blog.query.filter_by(id=data.get("id")).update(data)
     db.session.commit()
     return Response(json.dumps({"updated_rows": writer}), status=200)
@@ -59,7 +59,7 @@ def get_blog_articles(id):
 
 @blogs_view_blueprint.route('/delete', methods=["POST"])
 def delete():
-    data = json.loads(request.get_json())
+    data = request.get_json()
     blog = Blog.query.filter_by(id=data.get("id")).delete()
     db.session.commit()
     return Response(json.dumps({"deleted_rows": blog}), status=200)
