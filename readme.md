@@ -5,17 +5,17 @@
 make dry_run
 
 ## To startup
-make venv-init
-make init-env
-make init-db
-make migrate-up
-make run
+make venv-init <br />
+make init-env <br />
+make init-db <br />
+make migrate-up <br />
+make run <br />
 
 
 ## To test
-make venv-init (if not initialized)
-make init-env (if not initialized)
-make test
+make venv-init (if not initialized) <br />
+make init-env (if not initialized) <br />
+make test <br />
 
 
 PORT in env.template is set too 3420
